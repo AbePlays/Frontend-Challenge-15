@@ -2,7 +2,7 @@
   <div class="relative w-full mx-auto bg-white p-4 grid grid-cols-10 gap-2">
     <div
       @click="toggleComplete"
-      class="h-6 w-6 bg-white border-gray-200 border rounded-full col-start-1 col-end-2 flex justify-center items-center"
+      class="h-6 w-6 bg-white border-gray-200 border rounded-full col-start-1 col-end-2 flex justify-center items-center cursor-pointer"
       :class="{ 'bg-purple-400': todo.isComplete }"
     >
       <svg
@@ -30,7 +30,7 @@
     </p>
     <svg
       @click="remove"
-      class="text-xs col-start-10 col-end-11 justify-self-end"
+      class="text-xs col-start-10 col-end-11 justify-self-end cursor-pointer"
       xmlns="http://www.w3.org/2000/svg"
       width="18"
       height="18"

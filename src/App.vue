@@ -34,6 +34,7 @@
         />
       </div>
       <div
+        v-if="todos.length > 0"
         class="sm:w-1/2 xl:w-1/3 mx-auto bg-white mt-4 shadow-xl p-4 flex justify-center md:hidden flex text-md"
       >
         <task-toggle :isMobile="true" @filterResults="filter" />
