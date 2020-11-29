@@ -1,5 +1,5 @@
 <template>
-  <div class="relative sm:w-1/3 mx-auto">
+  <div class="relative md:w-1/3 mx-auto">
     <input
       type="text"
       placeholder="Create a new todo..."

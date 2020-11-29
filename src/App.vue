@@ -1,10 +1,12 @@
 <template>
-  <section
-    class="h-screen w-screen bg-hero-light-mobile sm:bg-hero-light-desktop bg-top bg-no-repeat bg-contain sm:bg-auto"
-  >
-    <the-header class="mx-auto" />
-    <add-to-do />
-  </section>
+  <div class="h-screen w-screen bg-red-100">
+    <section
+      class="h-1/3 w-full bg-hero-light-mobile sm:bg-hero-light-desktop bg-top bg-no-repeat bg-cover px-8 md:px-0 flex flex-col justify-center gap-6"
+    >
+      <the-header class="mx-auto" />
+      <add-to-do />
+    </section>
+  </div>
 </template>
 
 <script>
