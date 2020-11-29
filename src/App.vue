@@ -27,6 +27,7 @@
           />
         </div>
         <bottom-bar
+          v-if="todos.length > 0"
           :length="totalTodo"
           @clearCompleted="clear"
           @filter="filter"
@@ -74,6 +75,7 @@ export default {
       ],
       showFilteredResults: false,
       filteredArray: [],
+      filterText: "",
     };
   },
   computed: {
@@ -98,6 +100,9 @@ export default {
     toggleTodo(task) {
       const index = this.todos.findIndex((todo) => todo.title === task);
       this.todos[index].isComplete = !this.todos[index].isComplete;
+      if (this.showFilteredResults) {
+        this.filter(this.filterText);
+      }
     },
     clear() {
       this.todos = this.todos.filter((todo) => !todo.isComplete);
@@ -112,6 +117,7 @@ export default {
       } else {
         this.showFilteredResults = false;
       }
+      this.filterText = text;
     },
   },
 };

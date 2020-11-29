@@ -9,7 +9,7 @@
       type="text"
       @keydown="letsgo"
       placeholder="Create a new todo..."
-      class="w-full col-start-2 col-end-11 placeholder-gray-900"
+      class="w-full col-start-2 col-end-11 placeholder-gray-900 focus:outline-none"
       v-model="todo"
     />
   </div>
