@@ -8,19 +8,34 @@
     </section>
     <section class="w-screen transform -translate-y-14 px-6 sm:px-0">
       <div class="sm:w-1/2 xl:w-1/3 mx-auto shadow-xl bg-white divide-y">
-        <to-do
-          v-for="todo in todos"
-          :key="todo.title"
-          :todo="todo"
-          @remove="removeTodo"
-          @toggle="toggleTodo"
+        <div v-if="showFilteredResults">
+          <to-do
+            v-for="todo in filteredArray"
+            :key="todo.title"
+            :todo="todo"
+            @remove="removeTodo"
+            @toggle="toggleTodo"
+          />
+        </div>
+        <div v-else>
+          <to-do
+            v-for="todo in todos"
+            :key="todo.title"
+            :todo="todo"
+            @remove="removeTodo"
+            @toggle="toggleTodo"
+          />
+        </div>
+        <bottom-bar
+          :length="totalTodo"
+          @clearCompleted="clear"
+          @filter="filter"
         />
-        <bottom-bar v-if="totalTodo > 0" :length="totalTodo" />
       </div>
       <div
         class="sm:w-1/2 xl:w-1/3 mx-auto bg-white mt-4 shadow-xl p-4 flex justify-center md:hidden flex text-md"
       >
-        <task-toggle :isMobile="true" />
+        <task-toggle :isMobile="true" @filterResults="filter" />
       </div>
     </section>
   </div>
@@ -57,10 +72,15 @@ export default {
           isComplete: false,
         },
       ],
+      showFilteredResults: false,
+      filteredArray: [],
     };
   },
   computed: {
     totalTodo() {
+      if (this.showFilteredResults) {
+        return this.filteredArray.length;
+      }
       return this.todos.length;
     },
   },
@@ -78,6 +98,20 @@ export default {
     toggleTodo(task) {
       const index = this.todos.findIndex((todo) => todo.title === task);
       this.todos[index].isComplete = !this.todos[index].isComplete;
+    },
+    clear() {
+      this.todos = this.todos.filter((todo) => !todo.isComplete);
+    },
+    filter(text) {
+      if (text === "active") {
+        this.filteredArray = this.todos.filter((todo) => !todo.isComplete);
+        this.showFilteredResults = true;
+      } else if (text === "completed") {
+        this.filteredArray = this.todos.filter((todo) => todo.isComplete);
+        this.showFilteredResults = true;
+      } else {
+        this.showFilteredResults = false;
+      }
     },
   },
 };
