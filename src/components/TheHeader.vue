@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center md:w-1/3 py-4">
+  <div class="flex justify-between items-center sm:w-1/2 xl:w-1/3 w-full">
     <h1 class="text-3xl text-white uppercase tracking-custom font-bold">
       TODO
     </h1>
