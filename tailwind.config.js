@@ -2,6 +2,12 @@ module.exports = {
   purge: { content: ["./public/**/*.html", "./src/**/*.vue"] },
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      sans: ['"Josefin Sans"'],
+    },
+    letterSpacing: {
+      custom: "1rem",
+    },
     extend: {
       backgroundImage: (theme) => ({
         "hero-light-desktop": "url('./images/bg-desktop-light.jpg')",
