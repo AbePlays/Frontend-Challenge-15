@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-2">
+  <div class="flex" :class="{ 'gap-6': isMobile, 'gap-2': !isMobile }">
     <p class="font-semibold">All</p>
     <p class="font-semibold">Active</p>
     <p class="font-semibold">Completed</p>
@@ -7,5 +7,7 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["isMobile"],
+};
 </script>

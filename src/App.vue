@@ -10,16 +10,17 @@
       <div class="sm:w-1/2 xl:w-1/3 mx-auto shadow-xl bg-white divide-y">
         <to-do
           v-for="todo in todos"
-          :key="todo"
+          :key="todo.title"
           :todo="todo"
           @remove="removeTodo"
+          @toggle="toggleTodo"
         />
-        <bottom-bar v-if="todos.length > 0" />
+        <bottom-bar v-if="totalTodo > 0" :length="totalTodo" />
       </div>
       <div
         class="sm:w-1/2 xl:w-1/3 mx-auto bg-white mt-4 shadow-xl p-4 flex justify-center md:hidden flex text-md"
       >
-        <task-toggle />
+        <task-toggle :isMobile="true" />
       </div>
     </section>
   </div>
@@ -42,15 +43,41 @@ export default {
   },
   data() {
     return {
-      todos: [],
+      todos: [
+        {
+          title: "Take out trash",
+          isComplete: true,
+        },
+        {
+          title: "Read 1 hour",
+          isComplete: false,
+        },
+        {
+          title: "Exercise",
+          isComplete: false,
+        },
+      ],
     };
+  },
+  computed: {
+    totalTodo() {
+      return this.todos.length;
+    },
   },
   methods: {
     submitHandler(todo) {
-      this.todos.push(todo);
+      const obj = {
+        title: todo,
+        isComplete: false,
+      };
+      this.todos.unshift(obj);
     },
     removeTodo(task) {
-      this.todos = this.todos.filter((todo) => todo !== task);
+      this.todos = this.todos.filter((todo) => todo.title !== task);
+    },
+    toggleTodo(task) {
+      const index = this.todos.findIndex((todo) => todo.title === task);
+      this.todos[index].isComplete = !this.todos[index].isComplete;
     },
   },
 };
