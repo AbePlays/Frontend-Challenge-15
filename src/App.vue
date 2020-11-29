@@ -1,5 +1,7 @@
 <template>
-  <h1>Hello World!</h1>
+  <section
+    class="h-screen w-screen bg-hero-light-mobile sm:bg-hero-light-desktop bg-top bg-no-repeat bg-contain sm:bg-auto"
+  ></section>
 </template>
 
 <script>
