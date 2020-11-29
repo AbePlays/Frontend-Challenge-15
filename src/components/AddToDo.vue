@@ -7,12 +7,29 @@
     ></div>
     <input
       type="text"
+      @keydown="letsgo"
       placeholder="Create a new todo..."
       class="w-full col-start-2 col-end-11"
+      v-model="todo"
     />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  emits: ["submit-pressed"],
+  data() {
+    return {
+      todo: "",
+    };
+  },
+  methods: {
+    letsgo(e) {
+      if (e.keyCode === 13) {
+        this.$emit("submit-pressed", this.todo);
+        this.todo = "";
+      }
+    },
+  },
+};
 </script>

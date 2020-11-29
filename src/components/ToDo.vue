@@ -3,8 +3,9 @@
     <div
       class="h-5 w-5 bg-white border-gray-200 border rounded-full col-start-1 col-end-2"
     ></div>
-    <p class="col-start-2 col-end-10">Buy Groceries</p>
+    <p class="col-start-2 col-end-10">{{ todo }}</p>
     <svg
+      @click="remove"
       class="text-xs col-start-10 col-end-11 justify-self-end"
       xmlns="http://www.w3.org/2000/svg"
       width="18"
@@ -20,5 +21,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  emits: ["remove"],
+  props: ["todo"],
+  methods: {
+    remove() {
+      this.$emit("remove", this.todo);
+    },
+  },
+};
 </script>

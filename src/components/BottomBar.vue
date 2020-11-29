@@ -4,7 +4,7 @@
     <div class="hidden md:block">
       <task-toggle />
     </div>
-    <p>Clear completed</p>
+    <p>Clear Completed</p>
   </div>
 </template>
 
