@@ -1,12 +1,14 @@
 <template>
-  <div class="relative w-full mx-auto bg-white p-4 grid grid-cols-10 gap-2">
+  <div
+    class="relative w-full mx-auto bg-white dark:bg-gray-900 p-4 grid grid-cols-10 gap-2"
+  >
     <div
       @click="toggleComplete"
-      class="h-6 w-6 bg-white border-gray-200 border rounded-full col-start-1 col-end-2 flex justify-center items-center cursor-pointer"
-      :class="{ 'bg-purple-400': todo.isComplete }"
+      class="h-6 w-6 bg-white dark:bg-gray-900 border-gray-200 border rounded-full col-start-1 col-end-2 flex justify-center items-center cursor-pointer"
+      :class="{ 'bg-purple-400 dark:bg-purple-400': todo.isComplete }"
     >
       <svg
-        class="text-white w-3 h-3"
+        class="text-white dark:text-gray-900 w-3 h-3"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -21,7 +23,7 @@
       </svg>
     </div>
     <p
-      class="col-start-2 col-end-10 text-gray-500"
+      class="col-start-2 col-end-10 text-gray-500 dark:text-gray-400"
       :class="{
         'line-through text-opacity-40': todo.isComplete,
       }"

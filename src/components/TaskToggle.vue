@@ -1,5 +1,8 @@
 <template>
-  <div class="flex" :class="{ 'gap-6': isMobile, 'gap-2': !isMobile }">
+  <div
+    class="flex dark:text-gray-400"
+    :class="{ 'gap-6': isMobile, 'gap-2': !isMobile }"
+  >
     <p class="font-semibold cursor-pointer" @click="showFilteredResults('all')">
       All
     </p>
