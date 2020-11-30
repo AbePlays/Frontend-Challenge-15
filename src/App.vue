@@ -14,35 +14,31 @@
       <div
         class="sm:w-1/2 xl:w-1/3 mx-auto shadow-xl divide-y dark:divide-gray-600"
       >
-        <div v-if="showFilteredResults" class="divide-y dark:divide-gray-600">
-          <transition-group name="list">
+        <div class="divide-y dark:divide-gray-600">
+          <transition-group name="list" mode="out-in">
             <to-do
-              v-for="todo in filteredArray"
+              v-for="todo in filteredTodos"
               :key="todo.title"
               :todo="todo"
               @remove="removeTodo"
               @toggle="toggleTodo"
             />
+            <div
+              v-if="todos.length > 0"
+              class="flex justify-between p-4 gap-2 text-gray-400 bg-white dark:bg-gray-900"
+            >
+              <p>{{ totalTodo }} items left</p>
+              <div class="hidden md:block">
+                <task-toggle
+                  :isMobile="false"
+                  @filterResults="filter"
+                  :index="currentIndex"
+                />
+              </div>
+              <p class="cursor-pointer" @click="clear">Clear Completed</p>
+            </div>
           </transition-group>
         </div>
-        <div v-else class="divide-y dark:divide-gray-600">
-          <transition-group name="list">
-            <to-do
-              v-for="todo in todos"
-              :key="todo.title"
-              :todo="todo"
-              @remove="removeTodo"
-              @toggle="toggleTodo"
-            />
-          </transition-group>
-        </div>
-        <bottom-bar
-          v-if="todos.length > 0"
-          :length="totalTodo"
-          @clearCompleted="clear"
-          @filter="filter"
-          :index="currentIndex"
-        />
       </div>
       <div
         v-if="todos.length > 0"
@@ -62,7 +58,6 @@
 import TheHeader from "./components/TheHeader.vue";
 import AddToDo from "./components/AddToDo.vue";
 import ToDo from "./components/ToDo.vue";
-import BottomBar from "./components/BottomBar.vue";
 import TaskToggle from "./components/TaskToggle.vue";
 
 export default {
@@ -70,65 +65,76 @@ export default {
     TheHeader,
     AddToDo,
     ToDo,
-    BottomBar,
     TaskToggle,
   },
   data() {
     return {
       todos: [],
-      showFilteredResults: false,
-      filteredArray: [],
-      filterText: "",
+      filteredTodos: [],
       darkMode: false,
       currentIndex: 0,
     };
   },
   computed: {
     totalTodo() {
-      if (this.showFilteredResults) {
-        return this.filteredArray.length;
+      if (this.currentIndex === 1 || this.currentIndex === 2) {
+        return this.filteredTodos.length;
       }
       return this.todos.length;
     },
   },
   methods: {
     submitHandler(todo) {
+      console.log("[SUBMIT HANDLER]");
       const obj = {
         title: todo,
         isComplete: false,
       };
       this.todos.unshift(obj);
+      this.filteredTodos = this.todos;
     },
     removeTodo(task) {
+      console.log("[REMOVE TODO]");
       this.todos = this.todos.filter((todo) => todo.title !== task);
+      this.filteredTodos = this.todos;
     },
     toggleTodo(task) {
+      console.log("[TOGGLE TODO]");
       const index = this.todos.findIndex((todo) => todo.title === task);
       this.todos[index].isComplete = !this.todos[index].isComplete;
-      if (this.showFilteredResults) {
-        this.filter(this.filterText);
+      this.filteredTodos = this.todos;
+      if (this.currentIndex !== 0) {
+        if (this.currentIndex === 1) {
+          this.filter("active");
+        } else {
+          this.filter("completed");
+        }
       }
     },
     clear() {
+      console.log("[CLEAR]");
       this.todos = this.todos.filter((todo) => !todo.isComplete);
-      if (this.showFilteredResults) {
-        this.filter(this.filterText);
+      this.filteredTodos = this.todos;
+      if (this.currentIndex !== 0) {
+        if (this.currentIndex === 1) {
+          this.filter("active");
+        } else {
+          this.filter("completed");
+        }
       }
     },
     filter(text) {
+      console.log("[FILTER]");
       if (text === "active") {
-        this.filteredArray = this.todos.filter((todo) => !todo.isComplete);
-        this.showFilteredResults = true;
+        this.filteredTodos = this.todos.filter((todo) => !todo.isComplete);
         this.currentIndex = 1;
       } else if (text === "completed") {
-        this.filteredArray = this.todos.filter((todo) => todo.isComplete);
-        this.showFilteredResults = true;
+        this.filteredTodos = this.todos.filter((todo) => todo.isComplete);
         this.currentIndex = 2;
       } else {
-        this.showFilteredResults = false;
         this.currentIndex = 0;
+        this.filteredTodos = this.todos;
       }
-      this.filterText = text;
     },
     toggleDarkMode() {
       const className = document.querySelector("html").className;
@@ -143,7 +149,7 @@ export default {
 <style lang="scss" scoped>
 .list-enter-active,
 .list-leave-active {
-  transition: all 500ms ease-out;
+  transition: all 300ms ease-out;
 }
 
 .list-enter-from,
@@ -153,6 +159,6 @@ export default {
 }
 
 .list-move {
-  transition: all 500ms ease-out;
+  transition: all 300ms ease-out;
 }
 </style>

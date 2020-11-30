@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     letsgo(e) {
-      if (e.keyCode === 13) {
+      if (e.keyCode === 13 && this.todo.length > 0) {
         this.$emit("submit-pressed", this.todo);
         this.todo = "";
       }
