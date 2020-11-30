@@ -15,35 +15,44 @@
         class="sm:w-1/2 xl:w-1/3 mx-auto shadow-xl divide-y dark:divide-gray-600"
       >
         <div v-if="showFilteredResults" class="divide-y dark:divide-gray-600">
-          <to-do
-            v-for="todo in filteredArray"
-            :key="todo.title"
-            :todo="todo"
-            @remove="removeTodo"
-            @toggle="toggleTodo"
-          />
+          <transition-group name="list">
+            <to-do
+              v-for="todo in filteredArray"
+              :key="todo.title"
+              :todo="todo"
+              @remove="removeTodo"
+              @toggle="toggleTodo"
+            />
+          </transition-group>
         </div>
         <div v-else class="divide-y dark:divide-gray-600">
-          <to-do
-            v-for="todo in todos"
-            :key="todo.title"
-            :todo="todo"
-            @remove="removeTodo"
-            @toggle="toggleTodo"
-          />
+          <transition-group name="list">
+            <to-do
+              v-for="todo in todos"
+              :key="todo.title"
+              :todo="todo"
+              @remove="removeTodo"
+              @toggle="toggleTodo"
+            />
+          </transition-group>
         </div>
         <bottom-bar
           v-if="todos.length > 0"
           :length="totalTodo"
           @clearCompleted="clear"
           @filter="filter"
+          :index="currentIndex"
         />
       </div>
       <div
         v-if="todos.length > 0"
-        class="sm:w-1/2 xl:w-1/3 mx-auto bg-white mt-4 shadow-xl p-4 flex justify-center md:hidden flex text-md dark:bg-gray-900"
+        class="sm:w-1/2 xl:w-1/3 mx-auto bg-white mt-4 shadow-xl p-4 flex justify-center md:hidden text-md dark:bg-gray-900"
       >
-        <task-toggle :isMobile="true" @filterResults="filter" />
+        <task-toggle
+          :isMobile="true"
+          @filterResults="filter"
+          :index="currentIndex"
+        />
       </div>
     </section>
   </div>
@@ -71,6 +80,7 @@ export default {
       filteredArray: [],
       filterText: "",
       darkMode: false,
+      currentIndex: 0,
     };
   },
   computed: {
@@ -101,16 +111,22 @@ export default {
     },
     clear() {
       this.todos = this.todos.filter((todo) => !todo.isComplete);
+      if (this.showFilteredResults) {
+        this.filter(this.filterText);
+      }
     },
     filter(text) {
       if (text === "active") {
         this.filteredArray = this.todos.filter((todo) => !todo.isComplete);
         this.showFilteredResults = true;
+        this.currentIndex = 1;
       } else if (text === "completed") {
         this.filteredArray = this.todos.filter((todo) => todo.isComplete);
         this.showFilteredResults = true;
+        this.currentIndex = 2;
       } else {
         this.showFilteredResults = false;
+        this.currentIndex = 0;
       }
       this.filterText = text;
     },
@@ -123,3 +139,20 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.list-enter-active,
+.list-leave-active {
+  transition: all 500ms ease-out;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.list-move {
+  transition: all 500ms ease-out;
+}
+</style>
