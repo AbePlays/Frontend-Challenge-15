@@ -15,15 +15,16 @@
         class="sm:w-1/2 xl:w-1/3 mx-auto shadow-xl divide-y dark:divide-gray-600"
       >
         <div class="divide-y dark:divide-gray-600">
-          <transition-group name="list" mode="out-in">
+          <transition-group name="list">
             <to-do
               v-for="todo in filteredTodos"
-              :key="todo.title"
+              :key="todo.id"
               :todo="todo"
               @remove="removeTodo"
               @toggle="toggleTodo"
             />
             <div
+              key="iamunique"
               v-if="todos.length > 0"
               class="flex justify-between p-4 gap-2 text-gray-400 bg-white dark:bg-gray-900"
             >
@@ -83,10 +84,17 @@ export default {
       return this.todos.length;
     },
   },
+  watch: {
+    todos() {
+      if (this.todos.length === 0) {
+        this.currentIndex = 0;
+      }
+    },
+  },
   methods: {
     submitHandler(todo) {
-      console.log("[SUBMIT HANDLER]");
       const obj = {
+        id: new Date().toISOString(),
         title: todo,
         isComplete: false,
       };
@@ -94,26 +102,19 @@ export default {
       this.filteredTodos = this.todos;
     },
     removeTodo(task) {
-      console.log("[REMOVE TODO]");
       this.todos = this.todos.filter((todo) => todo.title !== task);
-      this.filteredTodos = this.todos;
+      this.check();
     },
     toggleTodo(task) {
-      console.log("[TOGGLE TODO]");
       const index = this.todos.findIndex((todo) => todo.title === task);
       this.todos[index].isComplete = !this.todos[index].isComplete;
-      this.filteredTodos = this.todos;
-      if (this.currentIndex !== 0) {
-        if (this.currentIndex === 1) {
-          this.filter("active");
-        } else {
-          this.filter("completed");
-        }
-      }
+      this.check();
     },
     clear() {
-      console.log("[CLEAR]");
       this.todos = this.todos.filter((todo) => !todo.isComplete);
+      this.check();
+    },
+    check() {
       this.filteredTodos = this.todos;
       if (this.currentIndex !== 0) {
         if (this.currentIndex === 1) {
@@ -124,7 +125,6 @@ export default {
       }
     },
     filter(text) {
-      console.log("[FILTER]");
       if (text === "active") {
         this.filteredTodos = this.todos.filter((todo) => !todo.isComplete);
         this.currentIndex = 1;
@@ -147,13 +147,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.list-enter-active,
-.list-leave-active {
+.list-enter-active {
   transition: all 300ms ease-out;
 }
 
-.list-enter-from,
-.list-leave-to {
+.list-enter-from {
   opacity: 0;
   transform: translateY(-30px);
 }

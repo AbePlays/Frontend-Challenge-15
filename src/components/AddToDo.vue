@@ -6,6 +6,7 @@
       class="h-6 w-6 bg-white dark:bg-gray-900 border-gray-200 border rounded-full col-start-1 col-end-2 self-center justify-self-center"
     ></div>
     <input
+      aria-label="input"
       type="text"
       @keydown="letsgo"
       placeholder="Create a new todo..."
